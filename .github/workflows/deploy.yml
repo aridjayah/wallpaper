@@ -16,28 +16,27 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.2"
-          bundler-cache: true
 
-      - name: Unfreeze bundler
+      - name: Install Bundler
+        run: gem install bundler
+
+      - name: Remove bundle lock freeze (IMPORTANT)
         run: bundle config unset deployment
 
-      - name: Install dependencies
-        run: bundle install
+      - name: Install dependencies (NO DEPLOY MODE)
+        run: bundle install --jobs 4 --retry 3
 
       - name: Build Jekyll
         run: bundle exec jekyll build
 
       # =========================
-      # 🔵 GOOGLE + BING PING
+      # 🔵 SEO PING
       # =========================
       - name: Ping Search Engines
         run: |
           SITE="https://aridjaya.com/wallpaper"
 
-          echo "🔵 Google Ping"
           curl "https://www.google.com/ping?sitemap=${SITE}/sitemap.xml"
-
-          echo "🔵 Bing Ping"
           curl "https://www.bing.com/ping?sitemap=${SITE}/sitemap.xml"
 
       # =========================
@@ -47,8 +46,6 @@ jobs:
         run: |
           SITE="https://aridjaya.com/wallpaper"
           KEY="639671a75c2147f593d1fbee7b1162d1"
-
-          echo "⚡ IndexNow Submit"
 
           curl -X POST "https://api.indexnow.org/indexnow" \
           -H "Content-Type: application/json" \
@@ -60,5 +57,3 @@ jobs:
               "'"$SITE"/sitemap.xml'"
             ]
           }'
-
-          echo "✅ IndexNow Done"
