@@ -1,4 +1,4 @@
-name: Jekyll Deploy Safe
+name: Jekyll Deploy Stable
 
 on:
   push:
@@ -31,13 +31,13 @@ jobs:
           rm -rf vendor Gemfile.lock _site .jekyll-cache
 
       # =========================
-      # 📦 INSTALL NORMAL MODE
+      # 📦 INSTALL CLEAN MODE
       # =========================
       - name: Install dependencies
         run: bundle install
 
       # =========================
-      # 🏗️ BUILD SITE
+      # 🏗️ BUILD
       # =========================
       - name: Build Jekyll
         run: bundle exec jekyll build
