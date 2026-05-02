@@ -6,13 +6,13 @@
       <div class="col-12 pt-4 text-center">
         © {{ site.time | date: "%Y" }}
         {% if site.copyright.name %}
-        <a href="{{site.copyright.link}}" class='text-decoration-none text-capitalize fw-bolder' target="_blank">
+        <a href="{{site.copyright.link}}" class='text-success text-decoration-none text-capitalize fw-bolder' target="_blank">
           {{site.copyright.name}}
         </a>
         {% else %}
         {{ site.title }}
         {% endif %}
-        . Supported by <a href="https://indonesiya.com" class='text-decoration-none text-capitalize fw-bolder' target="_blank">
+        . Supported by <a href="https://indonesiya.com" class='text-danger text-decoration-none text-capitalize fw-bolder' target="_blank">
           Indonesiya
         </a>.
       </div>
