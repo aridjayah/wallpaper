@@ -1,4 +1,4 @@
-name: Jekyll Deploy Stable
+name: Jekyll Deploy Clean
 
 on:
   push:
@@ -9,35 +9,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      # =========================
-      # 🚀 MANUAL RUBY (NO setup-ruby)
-      # =========================
       - name: Setup Ruby
-        uses: actions/setup-ruby@v1
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.2"
+          bundler-cache: false
 
-      - name: Install Bundler
+      - name: Install bundler
         run: gem install bundler
 
-      # =========================
-      # 🧹 FORCE CLEAN STATE
-      # =========================
-      - name: Clean environment
-        run: |
-          rm -rf vendor Gemfile.lock _site .jekyll-cache
+      - name: Clean
+        run: rm -rf Gemfile.lock vendor _site .jekyll-cache
 
-      # =========================
-      # 📦 INSTALL CLEAN MODE
-      # =========================
-      - name: Install dependencies
+      - name: Install deps
         run: bundle install
 
-      # =========================
-      # 🏗️ BUILD
-      # =========================
-      - name: Build Jekyll
+      - name: Build
         run: bundle exec jekyll build
