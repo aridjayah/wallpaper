@@ -12,7 +12,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Ruby
+      - name: Setup Ruby (NO AUTO BUNDLER CACHE)
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.2"
@@ -20,10 +20,13 @@ jobs:
       - name: Install Bundler
         run: gem install bundler
 
-      - name: Remove bundle lock freeze (IMPORTANT)
-        run: bundle config unset deployment
+      - name: Force disable deployment mode (CRITICAL)
+        run: |
+          bundle config unset deployment
+          bundle config unset frozen
+          bundle config set --local path vendor/bundle
 
-      - name: Install dependencies (NO DEPLOY MODE)
+      - name: Install dependencies (SAFE MODE)
         run: bundle install --jobs 4 --retry 3
 
       - name: Build Jekyll
@@ -40,7 +43,7 @@ jobs:
           curl "https://www.bing.com/ping?sitemap=${SITE}/sitemap.xml"
 
       # =========================
-      # ⚡ INDEXNOW FIXED
+      # ⚡ INDEXNOW
       # =========================
       - name: IndexNow Submit
         run: |
