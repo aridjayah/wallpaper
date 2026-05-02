@@ -2,7 +2,7 @@ name: Jekyll Deploy + SEO Auto Ping + IndexNow
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
@@ -15,8 +15,11 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.1"
+          ruby-version: "3.2"
           bundler-cache: true
+
+      - name: Unfreeze bundler
+        run: bundle config unset deployment
 
       - name: Install dependencies
         run: bundle install
@@ -25,43 +28,36 @@ jobs:
         run: bundle exec jekyll build
 
       # =========================
-      # 🔵 GOOGLE + BING PING (SITEMAP + RSS)
+      # 🔵 GOOGLE + BING PING
       # =========================
-      - name: Ping Google + Bing
+      - name: Ping Search Engines
         run: |
           SITE="https://aridjaya.com/wallpaper"
 
-          echo "🔵 Google Sitemap Ping"
-          curl "https://www.google.com/ping?sitemap=${SITE}/sitemap-index.xml"
+          echo "🔵 Google Ping"
+          curl "https://www.google.com/ping?sitemap=${SITE}/sitemap.xml"
 
-          echo "🔵 Bing Sitemap Ping"
-          curl "https://www.bing.com/ping?sitemap=${SITE}/sitemap-index.xml"
-
-          echo "🟢 Google RSS Ping"
-          curl "https://www.google.com/ping?sitemap=${SITE}/feed.xml"
-
-          echo "🟢 Bing RSS Ping"
-          curl "https://www.bing.com/ping?sitemap=${SITE}/feed.xml"
+          echo "🔵 Bing Ping"
+          curl "https://www.bing.com/ping?sitemap=${SITE}/sitemap.xml"
 
       # =========================
-      # ⚡ INDEXNOW (BING + YANDEX REAL-TIME)
+      # ⚡ INDEXNOW FIXED
       # =========================
       - name: IndexNow Submit
         run: |
           SITE="https://aridjaya.com/wallpaper"
           KEY="639671a75c2147f593d1fbee7b1162d1"
 
-          echo "⚡ Submitting IndexNow"
+          echo "⚡ IndexNow Submit"
 
           curl -X POST "https://api.indexnow.org/indexnow" \
           -H "Content-Type: application/json" \
           -d '{
-            "host": "aridjaya.com/wallpaper",
+            "host": "aridjaya.com",
             "key": "'"$KEY"'",
             "urlList": [
-              "'"$SITE"'/",
-              "'"$SITE"'/feed.xml",
-              "'"$SITE"'/sitemap-index.xml"
+              "'"$SITE"/'",
+              "'"$SITE"/sitemap.xml'"
             ]
           }'
 
